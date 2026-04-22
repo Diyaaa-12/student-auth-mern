@@ -132,5 +132,38 @@ router.put("/update-course", protect, async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+// ─── PUT /api/update-profile (protected) ─────────────────────────
+router.put("/update-profile", protect, async (req, res) => {
+  try {
+    const { name, profilePicture } = req.body;
 
+    if (!name && !profilePicture) {
+      return res.status(400).json({ message: "Nothing to update" });
+    }
+
+    const updates = {};
+    if (name && name.trim()) updates.name = name.trim();
+    if (profilePicture) {
+      // Validate it's a base64 image string
+      if (!profilePicture.startsWith("data:image/")) {
+        return res.status(400).json({ message: "Invalid image format" });
+      }
+      // Limit size to ~2MB (base64 is ~1.33x original)
+      if (profilePicture.length > 2 * 1024 * 1024 * 1.37) {
+        return res.status(400).json({ message: "Image too large. Max 2MB." });
+      }
+      updates.profilePicture = profilePicture;
+    }
+
+    const student = await Student.findByIdAndUpdate(
+      req.student.id,
+      updates,
+      { new: true }
+    ).select("-password");
+
+    res.status(200).json({ message: "Profile updated successfully", student });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
 module.exports = router;

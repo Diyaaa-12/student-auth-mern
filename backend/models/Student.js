@@ -24,6 +24,10 @@ const studentSchema = new mongoose.Schema(
       required: [true, "Course is required"],
       trim: true,
     },
+    profilePicture: {
+      type: String,
+      default: "",  // stores base64 image string
+    },
   },
   { timestamps: true }
 );
