@@ -15,8 +15,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setLoading(true);
+    setError(""); setLoading(true);
     try {
       const res = await axios.post(`${API}/login`, formData);
       localStorage.setItem("token", res.data.token);
@@ -30,49 +29,53 @@ export default function Login() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <div className="auth-header">
-          <div className="auth-icon">🔐</div>
-          <h2>Student Login</h2>
-          <p>Welcome back! Please login to continue</p>
+    <div className="auth-page">
+      <div className="auth-left">
+        <div className="auth-brand">
+          <span className="brand-dot" />
+          <span>StudentOS</span>
         </div>
+        <div className="auth-left-content">
+          <h1>Welcome<br /><em>back.</em></h1>
+          <p>Your dashboard, updates, and profile are all waiting for you.</p>
+        </div>
+        <div className="auth-left-footer">© 2025 StudentOS</div>
+      </div>
 
-        {error && <div className="alert alert-error">⚠️ {error}</div>}
+      <div className="auth-right">
+        <div className="auth-form-wrap">
+          <div className="form-eyebrow">Returning student</div>
+          <h2 className="form-title">Sign in</h2>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Email Address</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          {error && <div className="toast toast-error">{error}</div>}
 
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="field-group">
+              <label>Email Address</label>
+              <input
+                type="email" name="email"
+                placeholder="you@college.edu"
+                value={formData.email}
+                onChange={handleChange} required
+              />
+            </div>
+            <div className="field-group">
+              <label>Password</label>
+              <input
+                type="password" name="password"
+                placeholder="Your password"
+                value={formData.password}
+                onChange={handleChange} required
+              />
+            </div>
 
-          <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+            <button type="submit" className="btn-submit" disabled={loading}>
+              {loading ? <span className="btn-spinner" /> : "Sign In →"}
+            </button>
+          </form>
 
-        <p className="auth-footer">
-          Don't have an account? <Link to="/register">Register here</Link>
-        </p>
+          <p className="switch-link">New here? <Link to="/register">Create account</Link></p>
+        </div>
       </div>
     </div>
   );

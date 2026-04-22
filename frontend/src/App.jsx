@@ -4,7 +4,6 @@ import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import "./App.css";
 
-// Protected Route wrapper
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" replace />;
